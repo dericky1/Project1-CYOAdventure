@@ -33,6 +33,14 @@ const createNPC = async (NPCData) => {
     return NPCresult
 }
 
+//Create Item
+const createItem = async (ItemData) => {
+    let ItemCollection = await getCollection('Equipment')
+    let ItemResult = await ItemCollection.insertOne(ItemData)
+    // console.log(result)
+    return ItemResult
+}
+
 // Provide name, Searches the collection and returns an object
 const findPlayerByName = async (name) => {
     let playerCollection = await getCollection('player')
@@ -58,6 +66,12 @@ const findNPCById = async (id) => {
     return NPC
 }
 
+const findItemById = async (id) => {
+    let ItemCollection = await getCollection('Equipment')
+    let item = await ItemCollection.findOne({ _id: ObjectId(id) })
+    // console.log('player is: ', player)
+    return item
+}
 // updatePersonById
 const updatePersonById = async (id, newPersonData) => {
     let playerCollection = await getCollection('player')
@@ -74,4 +88,4 @@ const updateNPCById = async (id, newPersonData) => {
     return updated
 }
 
-module.exports = {getDb, getCollection, createPlayer, findPlayerById, findPlayerByName, updatePersonById, createNPC, findNPCById, updateNPCById};
+module.exports = {getDb, getCollection, createPlayer, findPlayerById, findPlayerByName, updatePersonById, createNPC, findNPCById, updateNPCById, createItem, findItemById};

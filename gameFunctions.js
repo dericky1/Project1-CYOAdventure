@@ -1,4 +1,4 @@
-const { findPlayerById, createPlayer, updatePersonById, createNPC, findNPCById, updateNPCById } = require("./mongoDb");
+const { findPlayerById, createPlayer, updatePersonById, createNPC, findNPCById, updateNPCById, createItem, findItemById } = require("./mongoDb");
 
 let gameState = {
     name: '',
@@ -12,6 +12,11 @@ let gameState = {
 let golemState = {
     name:'Golem',
     HP: 10
+}
+
+let equipmentState = {
+        name: 'Dagger',
+        DMG: 10
 }
 
 // Choose Class
@@ -51,9 +56,10 @@ function golemCombatRoll(lifeCount) {
 
 // Golem
 
-const attack = async (golemStateId) => {
+const attack = async (golemStateId,gameStateId) => {
+    gameState = await findPlayerById(gameStateId);
     golemState = await findNPCById(golemStateId);
-    await updateNPCById(golemState._id, {HP: golemState.HP -gameState.DMG})
+    await updateNPCById(golemState._id, {HP: golemState.HP - gameState.DMG})
     golemState = await findNPCById(golemStateId);
     // console.log('golemState is: ', golemState)
     if (golemState.HP <= 0){
@@ -80,7 +86,8 @@ const createGameState = async (name) => {
         name: name,
         lives: 3,
         role: '',
-        HP: 100
+        HP: 100,
+        DMG: 9
     });
     let newGameId = newGameState.insertedId;
     let game = await findPlayerById(newGameId);
@@ -101,4 +108,17 @@ const createGolem = async (name) => {
     return golemState
 }
 
-module.exports = {chooseClass, randomDice, golemCombatRoll, loadGameState, createGameState, createGolem, attack}
+// Create Equipment
+const createEquipment = async (name) => {
+    let newItemState = await createItem({
+        name: name,
+        HP: 10,
+        DMG: 10
+    });
+    let newItemId = newItemState.insertedId;
+    let item = await findItemById(newItemId);
+    itemState = item;
+    return itemState
+}
+
+module.exports = {chooseClass, randomDice, golemCombatRoll, loadGameState, createGameState, createGolem, createEquipment, attack}

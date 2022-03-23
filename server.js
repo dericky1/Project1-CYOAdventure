@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const {randomDice, chooseClass, golemCombatRoll, loadGameState, newGameId, createGameState, createGolem, attack} = require('./gameFunctions')
-const {updatePersonById, findPlayerById, findPlayerByName, getDb, getCollection, createPlayer, createNPC, } = require('./mongoDb');
+const {randomDice, chooseClass, golemCombatRoll, loadGameState, newGameId, createGameState, createGolem, createEquipment, attack} = require('./gameFunctions')
+const {updatePersonById, findPlayerById, findPlayerByName, getDb, getCollection, createPlayer, createNPC, createItem} = require('./mongoDb');
 // const mongoose = require('mongoose');
 
 // Listen
@@ -49,16 +49,24 @@ app.get('/Golem', async (req, res) => {
     res.send('The Golem has spawned! Go to curl http://localhost:5000/Golem/combat to attack it')
 });
 
+app.get('/Golem/reward', async (req,res) => {
+    equipmentState = await createEquipment('Dagger');
+    // console.log('equipmentState: ', equipmentState)
+    // console.log('equipmentState.DMG is: ', equipmentState.DMG)
+    await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
+    gameState = await findPlayerById(gameState._id);
+    res.send('Your DMG and HP have been increased by 10')
+});
+
 app.get('/Golem/attack', async (req, res) => { 
     // console.log(golemState);
-    attackFunction = await attack(golemState._id);
+    attackFunction = await attack(golemState._id,gameState._id);
     golemState = attackFunction.golemState;
     res.send(attackFunction.message)
 });
 
-app.get('/Golem/reward', async (req,res) => {
-    
-});
+
 app.get('/End', (req, res) => {
     res.send('You have finished the game! Here are your achievements:')
 });
+
