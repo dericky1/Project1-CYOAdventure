@@ -51,17 +51,17 @@ function golemCombatRoll(lifeCount) {
 // Golem
 
 const attack = async (golemStateId) => {
-    // let currentGolemState = await findNPCById(golemStateId)
-    // currentGolemState = await updateNPCById(currentGolemState._id, {HP: currentGolemState.HP -5})
-    // golemState = currentGolemState;
     golemState = await findNPCById(golemStateId);
-    await updateNPCById(golemState._id, {HP: golemState.HP -5})
+    await updateNPCById(golemState._id, {HP: golemState.HP -6})
     golemState = await findNPCById(golemStateId);
-    console.log('golemState is: ', golemState)
-    // if (currentGolemState.HP <= 0) {
-    //     return ('The golem has been defeated')
-    // }
-    return golemState
+    // console.log('golemState is: ', golemState)
+    if (golemState.HP <= 0){
+        message = (`You have defeated the golem!`)
+        return ({message: message, golemState: golemState})
+    } else {
+        message = (`You have attacked the golem and did 5 damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
+        return ({message: message, golemState: golemState})
+    }
 }
 
 // Load previous game
@@ -72,7 +72,6 @@ const loadGameState = async (id) => {
     // console.log('gameState is: ' , gameState);
     return gameState
 };
-
 
 // Create new game
 const createGameState = async (name) => {

@@ -53,8 +53,9 @@ app.get('/Golem', async (req, res) => {
 
 app.get('/Golem/attack', async (req, res) => { 
     // console.log(golemState);
-    golemState = await attack(golemState._id);
-    res.send('You have attacked the Golem and did 5 damage it has 5HP left.')
+    attackFunction = await attack(golemState._id);
+    golemState = attackFunction.golemState;
+    res.send(attackFunction.message)
 });
 
 app.get('/End', (req, res) => {
