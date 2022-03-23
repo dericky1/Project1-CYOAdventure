@@ -4,7 +4,8 @@ let gameState = {
     name: '',
     lives: 0,
     role: '',
-    HP: 100
+    HP: 100,
+    DMG: 9,
 
 }
 
@@ -52,14 +53,14 @@ function golemCombatRoll(lifeCount) {
 
 const attack = async (golemStateId) => {
     golemState = await findNPCById(golemStateId);
-    await updateNPCById(golemState._id, {HP: golemState.HP -6})
+    await updateNPCById(golemState._id, {HP: golemState.HP -gameState.DMG})
     golemState = await findNPCById(golemStateId);
     // console.log('golemState is: ', golemState)
     if (golemState.HP <= 0){
-        message = (`You have defeated the golem!`)
+        message = (`You have defeated the golem! Go to "http://localhost:5000/Golem/reward" to claim your reward!`)
         return ({message: message, golemState: golemState})
     } else {
-        message = (`You have attacked the golem and did 5 damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
+        message = (`You have attacked the golem and did ${gameState.DMG} damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
         return ({message: message, golemState: golemState})
     }
 }

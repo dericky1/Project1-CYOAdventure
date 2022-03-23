@@ -47,8 +47,6 @@ app.get('/Golem', async (req, res) => {
     golemState = await createGolem('Golem')
     // console.log(golemState)
     res.send('The Golem has spawned! Go to curl http://localhost:5000/Golem/combat to attack it')
-    //let message = golemCombatRoll()
-    //res.send(message)
 });
 
 app.get('/Golem/attack', async (req, res) => { 
@@ -58,6 +56,9 @@ app.get('/Golem/attack', async (req, res) => {
     res.send(attackFunction.message)
 });
 
+app.get('/Golem/reward', async (req,res) => {
+    
+});
 app.get('/End', (req, res) => {
     res.send('You have finished the game! Here are your achievements:')
 });

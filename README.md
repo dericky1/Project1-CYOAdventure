@@ -27,3 +27,4 @@ Quick links:
 /chooseClass - curl http://localhost:5000/chooseClass?role=Warrior
 /Golem - curl http://localhost:5000/Golem
 /Golem/attack - curl http://localhost:5000/Golem/attack
+/Golem/reward - curl http://localhost:5000/Golem/reward
