@@ -62,7 +62,7 @@ function randomDice (){
 
 // Golem
 
-const attack = async (golemStateId,gameStateId) => {
+const attack = async (golemStateId, gameStateId) => {
     gameState = await findPlayerById(gameStateId);
     golemState = await findNPCById(golemStateId);
     await updateNPCById(golemState._id, {HP: golemState.HP - gameState.DMG})
@@ -78,7 +78,7 @@ const attack = async (golemStateId,gameStateId) => {
 }
 const npcAttack = async(gameStateId, npcStateId) => {
     gameState = await findPlayerById(gameStateId);
-    console.log('npcAttack gameState is: ', gameState)
+    // console.log('npcAttack gameState is: ', gameState)
     dragonState = await findNPCById(npcStateId);
     await updatePersonById(gameState._id, {HP: gameState.HP - dragonState.DMG})
     gameState = await findPlayerById(gameStateId);
