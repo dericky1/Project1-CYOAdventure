@@ -77,16 +77,16 @@ app.get('/TreasureChest', async (req, res) => {
     //function that does dmg to you (takes in the id for the thing that attacks you)
     npcAttackFunction = await npcAttack(gameState._id, dragonState._id)
     gameState = npcAttackFunction.gameState;
-    console.log('gameState is: ', gameState)
+    // console.log('gameState is: ', gameState)
     res.send('You try to open the treasure chest but suddenly the ground starts shaking. A dragon shoots a fireball at you and has did 15 DMG! Defend yourself at "curl http://localhost:5000/Dragon/combat"')
 });
 
 app.get('/Dragon/combat', async (req, res) => {
     attackFunction = await attack(dragonState._id, gameState._id)
-    console.log('attackFunction is: ', attackFunction)
+    // console.log('attackFunction is: ', attackFunction)
     npcAttackFunction = await npcAttack(gameState._id, dragonState._id)
-    console.log('npcAttackFunction is: ', npcAttackFunction)
-    res.send('asdf')
+    // console.log('npcAttackFunction is: ', npcAttackFunction)
+    res.send('npcAttackFunc' + npcAttackFunction.message + 'attackFunc' + attackFunction.message)
 });
 
 app.get('/End', (req, res) => {
