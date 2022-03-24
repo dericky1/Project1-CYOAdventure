@@ -54,7 +54,7 @@ app.get('/Golem', async (req, res) => {
 });
 
 app.get('/Golem/reward', async (req,res) => {
-    equipmentState = await createEquipment('Dagger');
+    equipmentState = await createEquipment('Dagger', 10, 10);
     // console.log('equipmentState: ', equipmentState)
     // console.log('equipmentState.DMG is: ', equipmentState.DMG)
     await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
@@ -89,7 +89,13 @@ app.get('/Dragon/combat', async (req, res) => {
     res.send(npcAttackFunction.message + attackFunction.message)
 });
 
-
+app.get('/Dragon/reward', async (req, res) => {
+    // create Armour drop
+    equipmentState = await createEquipment('Armour', 100, 5);
+    // 
+    await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
+    res.send()
+});
 
 
 app.get('/Home', (req, res) => {

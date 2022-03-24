@@ -143,11 +143,11 @@ const createDragon = async (name) => {
 }
 
 // Create Equipment
-const createEquipment = async (name) => {
+const createEquipment = async (name, HP, DMG) => {
     let newItemState = await createItem({
         name: name,
-        HP: 10,
-        DMG: 10
+        HP: HP,
+        DMG: DMG
     });
     let newItemId = newItemState.insertedId;
     let item = await findItemById(newItemId);
