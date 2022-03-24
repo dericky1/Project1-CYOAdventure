@@ -14,6 +14,9 @@ let golemState = {
     HP: 10
 }
 
+let npcState = {
+}
+
 let equipmentState = {
         name: 'Dagger',
         DMG: 10
@@ -62,31 +65,30 @@ function randomDice (){
 
 // Golem
 
-const attack = async (golemStateId, gameStateId) => {
+const attack = async (npcStateId, gameStateId) => {
     gameState = await findPlayerById(gameStateId);
-    golemState = await findNPCById(golemStateId);
-    await updateNPCById(golemState._id, {HP: golemState.HP - gameState.DMG})
-    golemState = await findNPCById(golemStateId);
-    // console.log('golemState is: ', golemState)
-    if (golemState.HP <= 0){
-        message = (`You have defeated the golem! Go to "http://localhost:5000/Golem/reward" to claim your reward!`)
-        return ({message: message, golemState: golemState})
+    npcState = await findNPCById(npcStateId);
+    await updateNPCById(npcState._id, {HP: npcState.HP - gameState.DMG})
+    npcState = await findNPCById(npcStateId);
+    if (npcState.HP <= 0){
+        message = (` You have defeated the ${npcState.name}! Go to "http://localhost:5000/${npcState.name}/reward" to claim your reward!`)
+        return ({message: message, npcState: npcState})
     } else {
-        message = (`You have attacked the golem and did ${gameState.DMG} damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
-        return ({message: message, golemState: golemState})
+        message = (` You have attacked the ${npcState.name} and did ${gameState.DMG} damage, it has ${npcState.HP} HP left! Visit the endpoint again to attack the ${npcState.name} again!`)
+        return ({message: message, npcState: npcState})
     }
 }
 const npcAttack = async(gameStateId, npcStateId) => {
     gameState = await findPlayerById(gameStateId);
     // console.log('npcAttack gameState is: ', gameState)
-    dragonState = await findNPCById(npcStateId);
-    await updatePersonById(gameState._id, {HP: gameState.HP - dragonState.DMG})
+    npcState = await findNPCById(npcStateId);
+    await updatePersonById(gameState._id, {HP: gameState.HP - npcState.DMG})
     gameState = await findPlayerById(gameStateId);
     if (gameState.HP <= 0){
         message = (`Oh dear you have died...`)
         return ({message: message, gameState: gameState})
     } else {
-        message = (`The ${dragonState.name} has attacked you and did ${dragonState.DMG} damage, you have ${gameState.HP} HP left!`)
+        message = (`The ${npcState.name} has attacked you and did ${npcState.DMG} damage, you have ${gameState.HP} HP left!`)
         return ({message: message, gameState: gameState})
     }
 }
