@@ -28,3 +28,11 @@ Quick links:
 /Golem - curl http://localhost:5000/Golem
 /Golem/attack - curl http://localhost:5000/Golem/attack
 /Golem/reward - curl http://localhost:5000/Golem/reward
+/TreasureChest - curl http://localhost:5000/TreasureChest
+/Dragon/combat - curl http://localhost:5000/Dragon/combat
+
+
+runs
+startGame
+chooseClass
+Golem/reward

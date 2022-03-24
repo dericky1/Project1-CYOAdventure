@@ -45,7 +45,7 @@ const createItem = async (ItemData) => {
 const findPlayerByName = async (name) => {
     let playerCollection = await getCollection('player')
     let player = await playerCollection.findOne({name: name })
-    console.log('name is: ', player)
+    // console.log('name is: ', player)
     return player
 }
 
