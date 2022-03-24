@@ -86,10 +86,13 @@ app.get('/Dragon/combat', async (req, res) => {
     // console.log('attackFunction is: ', attackFunction)
     npcAttackFunction = await npcAttack(gameState._id, dragonState._id)
     // console.log('npcAttackFunction is: ', npcAttackFunction)
-    res.send('npcAttackFunc' + npcAttackFunction.message + 'attackFunc' + attackFunction.message)
+    res.send(npcAttackFunction.message + attackFunction.message)
 });
 
-app.get('/End', (req, res) => {
-    res.send('You have finished the game! Here are your achievements:')
+
+
+
+app.get('/Home', (req, res) => {
+    res.send('You have returned Home! Here are your stats:')
 });
 
