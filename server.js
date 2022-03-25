@@ -92,9 +92,9 @@ app.get('/Dragon/combat', async (req, res) => {
 app.get('/Dragon/reward', async (req, res) => {
     // create Armour drop
     equipmentState = await createEquipment('Armour', 100, 5);
-    // 
+    // update character stats
     await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
-    res.send()
+    res.send('You open the treasure chest and find some armour! It has increased your health points by 100 and damage by 5')
 });
 
 
