@@ -32,7 +32,9 @@ Quick links:
 /Dragon/combat - curl http://localhost:5000/Dragon/combat
 
 
-runs
+./curlrequests.sh
+------------------
 startGame
 chooseClass
 Golem/reward
+TreasureChest
