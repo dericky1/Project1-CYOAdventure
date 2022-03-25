@@ -25,6 +25,13 @@ let dragonState = {
     DMG: 15
 }
 
+
+let npcState = {
+    name: '',
+    HP: 0,
+    DMG: 0,
+
+}
 // Choose Class
 function chooseClass(role) {
     if((role === 'Warrior') || ( role === "warrior")){
@@ -60,25 +67,47 @@ function randomDice (){
 //     }
 // }
 
-// Golem
 
-const attack = async (golemStateId,gameStateId) => {
-    gameState = await findPlayerById(gameStateId);
-    golemState = await findNPCById(golemStateId);
-    await updateNPCById(golemState._id, {HP: golemState.HP - gameState.DMG})
-    golemState = await findNPCById(golemStateId);
-    // console.log('golemState is: ', golemState)
-    if (golemState.HP <= 0){
-        message = (`You have defeated the golem! Go to "http://localhost:5000/Golem/reward" to claim your reward!`)
-        return ({message: message, golemState: golemState})
+const handleCombat = async (gameStateId, npcStateId) => {
+    // user attacks npc
+    await attack(gameStateId, npcStateId)
+    // npc attacks user
+    await attack(npcStateId, gameStateId)
+    // Get player game state
+    gameState = await findPlayerById(gameStateId)
+    // Get npc game state
+    npcState = await findNPCById(npcStateId)
+    // HP checks
+    if (gameState.HP <= 0) {
+        return ('Oh dear you are dead!')
+    } else if (npcState.HP <= 0) {
+        return ('You have defeated the dragon. Go to ')
     } else {
-        message = (`You have attacked the golem and did ${gameState.DMG} damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
-        return ({message: message, golemState: golemState})
+        return (`You did ${gameState.DMG} to the dragon. The dragon attacked back and did ${npcState.DMG}`)
     }
+} 
+
+const attack = async (attackerId, attackedId) => {
+    gameState = await findPlayerById(attackerId);
+    // console.log('gameState is: ', gameState)
+    npcState = await findNPCById(attackedId);
+    console.log(gameState.name + ' attacks ' + npcState.name)
+    await updateNPCById(npcState._id, {HP: npcState.HP - gameState.DMG})
+    gameState = await findPlayerById(attackerId)
+    npcState = await findNPCById(attackedId);
+    // console.log('golemState is: ', golemState)
+    // if (golemState.HP <= 0){
+    //     message = (`You have defeated the golem! Go to "http://localhost:5000/Golem/reward" to claim your reward!`)
+    //     return ({message: message, golemState: golemState})
+    // } else {
+    //     message = (`You have attacked the golem and did ${gameState.DMG} damage, it has ${golemState.HP} HP left! Visit the endpoint again to attack the Golem again!`)
+    //     return ({message: message, golemState: golemState})
+    // }
 }
+
 const npcAttack = async(gameStateId, npcStateId) => {
     gameState = await findPlayerById(gameStateId);
-    console.log('npcAttack gameState is: ', gameState)
+    // console.log('npcAttack gameState is: ', gameState)
     dragonState = await findNPCById(npcStateId);
     await updatePersonById(gameState._id, {HP: gameState.HP - dragonState.DMG})
     gameState = await findPlayerById(gameStateId);
@@ -105,7 +134,7 @@ const createGameState = async (name) => {
         name: name,
         lives: 3,
         role: '',
-        HP: 100,
+        HP: 200,
         DMG: 9
     });
     let newGameId = newGameState.insertedId;
@@ -153,4 +182,4 @@ const createEquipment = async (name) => {
     return itemState
 }
 
-module.exports = {chooseClass, randomDice, loadGameState, createGameState, createGolem, createEquipment, createDragon, attack, npcAttack}
+module.exports = {chooseClass, randomDice, loadGameState, createGameState, createGolem, createEquipment, createDragon, attack, npcAttack, handleCombat}

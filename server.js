@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const {randomDice, chooseClass, loadGameState, newGameId, createGameState, createGolem, createEquipment, createDragon, attack, npcAttack} = require('./gameFunctions')
+const {randomDice, chooseClass, loadGameState, newGameId, createGameState, createGolem, createEquipment, createDragon, attack, npcAttack, handleCombat} = require('./gameFunctions')
 const {updatePersonById, findPlayerById, findPlayerByName, getDb, getCollection, createPlayer, createNPC, createItem} = require('./mongoDb');
 // const mongoose = require('mongoose');
 
@@ -54,7 +54,7 @@ app.get('/Golem', async (req, res) => {
 });
 
 app.get('/Golem/reward', async (req,res) => {
-    equipmentState = await createEquipment('Dagger');
+    equipmentState = await createEquipment('Dagger', 10, 10);
     // console.log('equipmentState: ', equipmentState)
     // console.log('equipmentState.DMG is: ', equipmentState.DMG)
     await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
@@ -77,19 +77,32 @@ app.get('/TreasureChest', async (req, res) => {
     //function that does dmg to you (takes in the id for the thing that attacks you)
     npcAttackFunction = await npcAttack(gameState._id, dragonState._id)
     gameState = npcAttackFunction.gameState;
-    console.log('gameState is: ', gameState)
+    // console.log('gameState is: ', gameState)
     res.send('You try to open the treasure chest but suddenly the ground starts shaking. A dragon shoots a fireball at you and has did 15 DMG! Defend yourself at "curl http://localhost:5000/Dragon/combat"')
 });
 
 app.get('/Dragon/combat', async (req, res) => {
-    attackFunction = await attack(dragonState._id, gameState._id)
-    console.log('attackFunction is: ', attackFunction)
-    npcAttackFunction = await npcAttack(gameState._id, dragonState._id)
-    console.log('npcAttackFunction is: ', npcAttackFunction)
-    res.send('asdf')
+    console.log(gameState)
+    console.log(dragonState)
+    combat = await handleCombat(gameState._id, dragonState._id)
+    // attackFunction = await attack(dragonState._id, gameState._id) // me attacking dragon
+    // // console.log('attackFunction is: ', attackFunction)
+    // npcAttackFunction = await npcAttack(gameState._id, dragonState._id) // dragon attacking me
+    // console.log('npcAttackFunction is: ', npcAttackFunction)
+    // res.send(npcAttackFunction.message + attackFunction.message)
+    res.send(combat)
 });
 
-app.get('/End', (req, res) => {
-    res.send('You have finished the game! Here are your achievements:')
+app.get('/Dragon/reward', async (req, res) => {
+    // create Armour drop
+    equipmentState = await createEquipment('Armour', 100, 5);
+    // update character stats
+    await updatePersonById(gameState._id, {DMG: gameState.DMG + equipmentState.DMG, HP: gameState.HP + equipmentState.HP})
+    res.send('You open the treasure chest and find some armour! It has increased your health points by 100 and damage by 5')
+});
+
+
+app.get('/Home', (req, res) => {
+    res.send('You have returned Home! Here are your stats:')
 });
 
